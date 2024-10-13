@@ -8,7 +8,7 @@ app.register_blueprint(login)
 
 @app.route("/")
 def index():
-    return "Homepage of GeeksForGeeks"
+    return "MediLink: Home Page"
 
 if __name__ == "__main__":
     app.run(debug=True)
