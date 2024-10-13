@@ -21,6 +21,7 @@ export default function LoginPage() {
       try {
         const vercel_deployment_url = process.env.EXPO_PUBLIC_DEPLOYMENT_URL;
         console.log("Vercel deployment URL: ", vercel_deployment_url);
+        console.log(variables);
         const { email, password } = variables;
         const data: LoginData = { email, password };
         const response = await axios.post(
