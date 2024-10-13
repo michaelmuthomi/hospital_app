@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect
-from db.client import supabase
+from api.db.client import supabase
 import requests
 
 login = Blueprint('login', __name__)
