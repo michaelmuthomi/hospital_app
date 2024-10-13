@@ -6,7 +6,7 @@ login = Blueprint('login', __name__)
 
 @login.route('/login', methods=['POST'])
 def login_route():
-    try {
+    try:
         data = request.get_json()
         email = data.get('email')
         password = data.get('password')
