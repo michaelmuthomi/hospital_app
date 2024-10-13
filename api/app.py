@@ -1,18 +1,15 @@
-from flask import Flask, request, jsonify
+from fastapi import FastAPI
+from routes.home import router as home_router
+from routes.login import router as login_router
+from routes.signup import router as signup_router
 
-app = Flask(__name__)
+app = FastAPI()
 
-@app.route('/')
-def home():
-    return "Welcome to the Flask backend!"
+# Include routers
+app.include_router(home_router)
+app.include_router(login_router)
+app.include_router(signup_router)
 
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    email = data.get('email')
-    password = data.get('password')
-    # Implement your login logic here
-    return jsonify({"message": "Login successful", "email": email})
-
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,44 +1,53 @@
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Image } from 'react-native';
+import React, { useState } from "react";
+import { View, TextInput, StyleSheet, Image } from "react-native";
 import { Input, Card, Button, TextComponent } from "~/components/ui";
-import tw from 'twrnc';
-import { LogoPlain } from '~/assets/icons';
+import tw from "twrnc";
+import { LogoPlain } from "~/assets/icons";
 import Doctors from "~/assets/images/doctors.png";
-import { Link } from 'expo-router';
-import { useMutation, UseBaseMutationResult } from '@tanstack/react-query';
-import axios from 'axios';
-
-const login = async ({ email, password }: { email: string; password: string }) => {
-  const response = await axios.post(
-    "https://<your-vercel-deployment-url>/api/login",
-    {
-      email,
-      password,
-    }
-  );
-  return response.data;
-};
+import { Link } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   interface LoginData {
     email: string;
     password: string;
   }
-  
-  const mutation: UseBaseMutationResult<any, Error, LoginData, unknown> = useMutation(login, {
-    onSuccess: (data: any) => {
-      console.log(data);
-    },
-    onError: (error: Error) => {
-      console.error(error);
-    },
-  });
-  
+
+  const login = async (variables: LoginData) => {
+      try {
+        const vercel_deployment_url = process.env.EXPO_PUBLIC_DEPLOYMENT_URL;
+        console.log("Vercel deployment URL: ", vercel_deployment_url);
+        const { email, password } = variables;
+        const data: LoginData = { email, password };
+        const response = await axios.post(
+          `${vercel_deployment_url}/api/login`,
+          data
+        );
+        return response.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 400) {
+            console.error("Bad request: ", error.response.data);
+          } else {
+            console.error("Request failed: ", error.response?.data);
+          }
+        } else {
+          console.error("An unexpected error occurred: ", error);
+        }
+        throw error; // Re-throw the error to handle it in the calling function
+      }
+    };
+
   const handleLogin = () => {
-    mutation.mutate({ email, password });
+    if (!email || !password) {
+      console.error("Email and password are required");
+      return;
+    }
+    login({ email, password });
   };
 
   return (
@@ -100,12 +109,12 @@ export default function LoginPage() {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
     padding: 16,
-    },
+  },
 });
