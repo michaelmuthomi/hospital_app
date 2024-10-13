@@ -17,33 +17,33 @@ export default function LoginPage() {
     password: string;
   }
 
-  const login = async (variables: LoginData) => {
-      try {
-        const vercel_deployment_url = process.env.EXPO_PUBLIC_DEPLOYMENT_URL;
-        console.log("Vercel deployment URL: ", vercel_deployment_url);
-        console.log(variables);
-        const { email, password } = variables;
-        const data: LoginData = { email, password };
-        const api_location = `${vercel_deployment_url}/api/login`
-        console.log(api_location)
-        const response = await axios.post(
-          api_location,
-          data
-        );
-        return response.data;
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 400) {
-            console.error("Bad request: ", error.response.data);
-          } else {
-            console.error("Request failed: ", error.response?.data);
-          }
-        } else {
-          console.error("An unexpected error occurred: ", error);
-        }
-        throw error; // Re-throw the error to handle it in the calling function
+  const login = async ({ email, password }: LoginData) => {
+    try {
+      const api_route = `${process.env.EXPO_PUBLIC_DEPLOYMENT_URL}/login`;
+      const response = await fetch(api_route, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error:", error.response ? error.response.data : error.message);
+      } else {
+        console.error("Error:", (error as Error).message);
+      }
+    }
+  };
 
   const handleLogin = () => {
     if (!email || !password) {
