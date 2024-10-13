@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import JSONResponse
-from ..supabase_client import supabase
+from supabase_client import supabase 
 
 router = APIRouter()
 
@@ -16,4 +16,4 @@ async def login(request: Request):
     if response.get('error'):
         raise HTTPException(status_code=400, detail="Invalid credentials")
     
-    return JSONResponse(content={"message": "Login successful", "email": email})
+    return JSONResponse(content={"message": "Login successful"})
