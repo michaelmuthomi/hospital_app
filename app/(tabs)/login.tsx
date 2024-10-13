@@ -24,8 +24,10 @@ export default function LoginPage() {
         console.log(variables);
         const { email, password } = variables;
         const data: LoginData = { email, password };
+        const api_location = `${vercel_deployment_url}/api/login`
+        console.log(api_location)
         const response = await axios.post(
-          `${vercel_deployment_url}/api/login`,
+          api_location,
           data
         );
         return response.data;
