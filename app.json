@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "MediLink",
+    "slug": "starter-base",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/MediLink.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/MediLink.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#00081e"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/MediLink.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.michaelmuthomi.starterbase"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/MediLink.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        [
+          "expo-google-fonts/inter",
+          {
+        "fonts": {
+          "Inter": "./assets/fonts/Inter-var.ttf"
+        }
+          }
+        ]
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b5120325-5c6a-439d-8bd5-6bfa741a4401"
+      }
+    },
+    "owner": "michaelmuthomi",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b5120325-5c6a-439d-8bd5-6bfa741a4401"
+    }
+  }
+}
