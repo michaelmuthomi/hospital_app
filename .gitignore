@@ -44,3 +44,5 @@ expo-env.d.ts
 
 # Virtual environment
 venv/
+
+__pycache__/
