@@ -3,6 +3,11 @@ from routes.login import login
 
 app = Flask(__name__)
 
+# Link Favicon
+@app.route('/favicon.ico')
+def favicon():
+    return url_for('static', filename='image/favicon.ico')
+
 # Register the blueprint
 app.register_blueprint(login)
 
