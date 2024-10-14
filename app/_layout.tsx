@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import "../global.css";
+import Toast from "react-native-toast-message";
 
 import {
   useFonts,
@@ -50,11 +51,31 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack initialRouteName="(tabs)">
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+      <Toast
+        position="bottom"
+        text1Style={{
+          fontFamily: "Inter_600SemiBold",
+          fontWeight: "600",
+          fontSize: 15,
+        }}
+        containerStyle = {{
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          borderRadius: 10,
+          margin: 50,
+          height: 100,
+        }}
+        text2Style={{
+          fontFamily: "Inter_400Regular",
+          fontWeight: "400",
+          fontSize: 10,
+        }}
+        onPress={() => Toast.hide()}
+      />
     </ThemeProvider>
   );
 }

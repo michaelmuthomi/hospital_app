@@ -7,7 +7,7 @@ import Doctors from "~/assets/images/doctors.png";
 import { Link } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-
+import Toast from "react-native-toast-message";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +16,13 @@ export default function LoginPage() {
     email: string;
     password: string;
   }
+  const showToast = (type: any, text1: any, text2?: any) => {
+    Toast.show({
+      type: type,
+      text1: text1,
+      text2: text2,
+    });
+  };
 
   const login = async ({ email, password }: LoginData) => {
     try {
@@ -31,23 +38,23 @@ export default function LoginPage() {
         }),
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        showToast("error", "Error", "Invalid email or password");
+        return;
       }
-
       const data = await response.json();
       console.log(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error("Error:", error.response ? error.response.data : error.message);
+        showToast("error", "Error", error.response ? error.response.data : error.message);
       } else {
-        console.error("Error:", (error as Error).message);
+        showToast("error", "Error", (error as Error).message);
       }
     }
   };
 
   const handleLogin = () => {
     if (!email || !password) {
-      console.error("Email and password are required");
+      showToast("error", "Email and password are required");
       return;
     }
     login({ email, password });
