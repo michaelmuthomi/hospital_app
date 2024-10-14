@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Image } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { Input, Card, Button, TextComponent } from "~/components/ui";
 import tw from "twrnc";
 import { LogoPlain } from "~/assets/icons";
@@ -8,23 +14,52 @@ import { Link } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Toast from "react-native-toast-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { Router } from "expo-router";
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   interface LoginData {
     email: string;
     password: string;
   }
-  const showToast = (type: any, text1: any, text2?: any) => {
-    Toast.show({
+  const showToast = (type: any, heading: any, subheading?: any) => {
+    showMessage({
+      message: heading,
+      description: subheading,
       type: type,
-      text1: text1,
-      text2: text2,
+      // floating: true,
+      position: "top",
+      style: {
+        marginBottom: 40,
+        backgroundColor: "white",
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: "#ededed",
+        shadowColor: "#fff",
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: "100%",
+        shadowRadius: 0.2,
+        elevation: 10,
+      },
+      titleStyle: {
+        fontFamily: "Inter_700Bold",
+        fontSize: 14,
+        color: "#9f1c1c",
+      },
+      textStyle: {
+        fontFamily: "Inter_400Regular",
+        fontSize: 14,
+        color: "black",
+      },
     });
   };
 
   const login = async ({ email, password }: LoginData) => {
+    setIsLoading(true);
     try {
       const api_route = `${process.env.EXPO_PUBLIC_DEPLOYMENT_URL}/login`;
       const response = await fetch(api_route, {
@@ -37,13 +72,17 @@ export default function LoginPage() {
           password: password,
         }),
       });
-      if (!response.ok) {
+      if (!response.ok) {      
         showToast("error", "Error", "Invalid email or password");
+        setIsLoading(false);
         return;
       }
       const data = await response.json();
+      // Push the user to the home page
+      router.push("/(tabs)/home");
       console.log(data);
     } catch (error) {
+      setIsLoading(false);
       if (axios.isAxiosError(error)) {
         showToast("error", "Error", error.response ? error.response.data : error.message);
       } else {
@@ -54,7 +93,7 @@ export default function LoginPage() {
 
   const handleLogin = () => {
     if (!email || !password) {
-      showToast("error", "Email and password are required");
+      showToast("danger", "Alert" , "Email and password are required");
       return;
     }
     login({ email, password });
@@ -91,15 +130,21 @@ export default function LoginPage() {
           autoCapitalize="none"
         />
         <View className="flex gap-2">
-          <Button
-            onPress={handleLogin}
-            size={null}
-            className="bg-green-700 h-14 rounded-full"
-          >
-            <TextComponent className="text-white font-Inter_Bold">
-              Login and Continue
-            </TextComponent>
-          </Button>
+          {isLoading ? (
+            <View className="flex items-center justify-center h-14 bg-green-700 h-14 rounded-full">
+              <ActivityIndicator size="small" color="#ffffff" />
+            </View>
+          ) : (
+            <Button
+              onPress={handleLogin}
+              size={null}
+              className="bg-green-700 h-14 rounded-full"
+            >
+              <TextComponent className="text-white font-Inter_Bold">
+                Login and Continue
+              </TextComponent>
+            </Button>
+          )}
           <Button
             onPress={handleLogin}
             size={null}

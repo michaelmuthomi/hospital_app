@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import "../global.css";
 import Toast from "react-native-toast-message";
+import FlashMessage from "react-native-flash-message";
 
 import {
   useFonts,
@@ -56,6 +57,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+      <FlashMessage position="top" />
       <Toast
         position="bottom"
         text1Style={{
@@ -63,8 +65,8 @@ export default function RootLayout() {
           fontWeight: "600",
           fontSize: 15,
         }}
-        containerStyle = {{
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        containerStyle={{
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
           borderRadius: 10,
           margin: 50,
           height: 100,
